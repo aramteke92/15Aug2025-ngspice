@@ -1,0 +1,31 @@
+name: Run Circuit Simulations
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install ngspice
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ngspice
+
+      - name: Run simulation
+        run: |
+          # Assuming your circuit file is in src/ and named circuit.cir
+          ngspice -b src/circuit.cir -o output.log
+          
+      - name: Upload output logs
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: simulation-outputs
+          path: output.log
