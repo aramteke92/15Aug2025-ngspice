@@ -22,7 +22,7 @@ jobs:
       - name: Run simulation
         run: |
           # Assuming your circuit file is in src/ and named circuit.cir
-          ngspice -b src/circuit.cir -o output.log
+          ngspice -b src/voltage_div.spice -o output.log
           
       - name: Upload output logs
         uses: actions/upload-artifact@v4.6.2
