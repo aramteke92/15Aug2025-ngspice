@@ -1,7 +1,7 @@
 name: Build and Test ngspice
 
 on:
-  push: 
+  push:
     branches:
       - main
   pull_request:
@@ -15,12 +15,18 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v2
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential autoconf automake libtool pkg-config
+          sudo apt-get install -y \
+            build-essential \
+            autoconf \
+            automake \
+            libtool \
+            pkg-config \
+            libreadline-dev
 
       - name: Generate configure script
         run: |
@@ -40,7 +46,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4.6.2
+        uses: actions/upload-artifact@v2
         with:
           name: ngspice-build
           path: build/
