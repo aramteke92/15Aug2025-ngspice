@@ -14,18 +14,38 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Install ngspice
+      - name: Install ngspice and gnuplot
         run: |
           sudo apt-get update
-          sudo apt-get install -y ngspice
+          sudo apt-get install -y ngspice gnuplot
 
-      - name: Run simulation
+      - name: Run simulation and generate plot
         run: |
-          # Assuming your circuit file is in src/ and named circuit.cir
+          # Run ngspice in batch mode and save output to output.log
           ngspice -b src/voltage_div.spice -o output.log
-          
+
+          # Create gnuplot script
+          echo "
+          set terminal png size 800,600
+          set output 'voltage_plot.png'
+          set title 'Voltage Output'
+          set xlabel 'Time'
+          set ylabel 'Voltage'
+          # Adjust plot command based on actual data format
+          plot 'output.log' using 1:2 with lines title 'V(OUT)'
+          " > plot.gp
+
+          # Run gnuplot to create the plot image
+          gnuplot plot.gp
+
       - name: Upload output logs
         uses: actions/upload-artifact@v4.6.2
         with:
           name: simulation-outputs
           path: output.log
+
+      - name: Upload voltage plot
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: voltage-plot
+          path: voltage_plot.png
