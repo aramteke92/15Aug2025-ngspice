@@ -1,11 +1,11 @@
-* CMOS Inverter with input and output voltage recording
+* CMOS Inverter with Varying Input Voltage (DC sweep)
 
 * Power supplies
 VDD VDD 0 DC 5V
 VSS VSS 0 DC 0V
 
-* Input voltage source (PWL waveform)
-VIN IN 0 PWL(0 0 1n 5 2n 0 3n 5 4n 0 5n 5 6n 0)
+* Input voltage source (DC sweep)
+VIN IN 0 DC 0V
 
 * NMOS transistor
 M1 OUT IN VSS VSS NMOS_MODEL
@@ -20,13 +20,20 @@ M2 OUT VDD VDD VDD PMOS_MODEL
 * Load at output
 RL OUT 0 10k
 
-* Simulation commands
+* Sweep V(IN) from 0V to 5V in steps of 0.1V
 .control
-  * Transient analysis for 8 ns with 10 ps timestep
-  tran 10p 8n
+  * Define the sweep
+  * Sweeping V(IN) from 0V to 5V in 0.1V steps
+  * For each V(IN), run a DC operating point and record V(OUT)
+  * Save V(IN) and V(OUT) for plotting
+  * Note: ngspice's `dc` command can be used for sweeping
 
-  * Write V(IN), V(OUT), and TIME to voltages.dat
-  wrdata voltages.dat V(IN) V(OUT) TIME
+  * Perform the sweep
+  dc VIN 0 5 0.1
+
+  * Save the sweep data: columns are V(IN) and V(OUT)
+  * Using `save` command to output the data
+  save dc_results.dat V(IN) V(OUT)
 
   quit
 .endc
