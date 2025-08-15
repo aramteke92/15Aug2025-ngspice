@@ -22,7 +22,7 @@ jobs:
       - name: Run simulation and generate plot
         run: |
           # Run ngspice in batch mode and save output to output.log
-          ngspice -b src/voltage_div.spice -o output.log
+          ngspice -b src/inverter.spice -o output.log
 
           # Create gnuplot script
           echo "
