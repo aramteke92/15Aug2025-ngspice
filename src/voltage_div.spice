@@ -1,9 +1,9 @@
-* CMOS Inverter Example for ngspice
+* CMOS Inverter Example for ngspice with data output
 
 * Power supply
 VDD VDD 0 DC 5V
 
-* Input voltage source
+* Input voltage source (pulse)
 VIN IN 0 PWL(0 0 1n 5 2n 0 3n 5 4n 0 5n 5 6n 0)
 
 * NMOS transistor
@@ -16,13 +16,18 @@ M2 OUT VDD VDD VDD PMOS_MODEL
 .model NMOS_MODEL NMOS (LEVEL=1 VTO=1 KP=2.0)
 .model PMOS_MODEL PMOS (LEVEL=1 VTO=-1 KP=1.0)
 
-* Load at output (optional)
+* Load at output
 RL OUT 0 10k
 
 * Simulation commands
 .control
-  run
-  plot V(IN) V(OUT)
+  * Perform transient analysis for 8ns with 10ps timestep
+  tran 10p 8n
+
+  * Write voltage and time data to voltages.dat for plotting
+  wrdata voltages.dat V(OUT) TIME
+
+  quit
 .endc
 
 .end
