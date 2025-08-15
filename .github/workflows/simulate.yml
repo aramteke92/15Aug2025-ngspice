@@ -8,43 +8,40 @@ on:
     branches:
       - main
 
+
 jobs:
   simulate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v3
 
-      - name: Install ngspice and gnuplot
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y ngspice gnuplot
 
-      - name: Run simulation and generate plot
+      - name: Run simulation
         run: |
-          # Run ngspice in batch mode (assuming your circuit file is src/inverter.spice)
+          # Run your ngspice simulation (replace with your actual command)
           ngspice -b src/inverter.spice
 
-          # Create gnuplot script to generate plot.png
-          echo "
-          set terminal png size 800,600
-          set output 'plot.png'
-          set title 'Inverter Output Voltage'
-          set xlabel 'Time (s)'
-          set ylabel 'V(OUT)'
-          plot 'voltages.dat' using 2:1 with lines title 'V(OUT)'
-          " > plot.gp
+      - name: Generate plot with gnuplot
+        run: |
+          # Create the plot
+          gnuplot -e "
+            set terminal png size 800,600;
+            set output 'plot1.png';
+            set title 'V(IN) vs V(OUT)';
+            set xlabel 'V(IN) (V)';
+            set ylabel 'V(OUT) (V)';
+            plot 'voltages.dat' using 1:2 with lines lw 2;"
+          
+      - name: List files to verify plot creation
+        run: ls -l
 
-          # Run gnuplot to produce plot.png
-          gnuplot plot.gp
-
-      - name: Upload output logs
+      - name: Upload plot artifact if exists
+        if: ${{ exists('plot1.png') }}
         uses: actions/upload-artifact@v4.6.2
         with:
-          name: simulation-outputs
-          path: output.log
-
-      - name: Upload plot image
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: simulation-plot
+          name: plot1
           path: plot1.png
