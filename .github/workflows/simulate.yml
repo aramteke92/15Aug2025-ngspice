@@ -8,7 +8,6 @@ on:
     branches:
       - main
 
-
 jobs:
   simulate:
     runs-on: ubuntu-latest
@@ -22,7 +21,7 @@ jobs:
 
       - name: Run simulation
         run: |
-          # Run your ngspice simulation (replace with your actual command)
+          # Run your ngspice simulation (adjust path if needed)
           ngspice -b src/inverter.spice
 
       - name: Generate plot with gnuplot
@@ -40,7 +39,7 @@ jobs:
         run: ls -l
 
       - name: Upload plot artifact if exists
-        if: ${{ exists('plot1.png') }}
+       
         uses: actions/upload-artifact@v4.6.2
         with:
           name: plot1
