@@ -13,27 +13,20 @@ M1 OUT IN VSS VSS NMOS_MODEL
 * PMOS transistor
 M2 OUT VDD VDD VDD PMOS_MODEL
 
-* Transistor models (simple level 1 models, replace with more accurate models if needed)
+* Transistor models
 .model NMOS_MODEL NMOS (LEVEL=1 VTO=1 KP=2.0)
 .model PMOS_MODEL PMOS (LEVEL=1 VTO=-1 KP=1.0)
 
-* Load at output
+* Load
 RL OUT 0 10k
 
-* Sweep V(IN) from 0V to 5V in steps of 0.1V
+* Simulation commands
 .control
-  * Define the sweep
-  * Sweeping V(IN) from 0V to 5V in 0.1V steps
-  * For each V(IN), run a DC operating point and record V(OUT)
-  * Save V(IN) and V(OUT) for plotting
-  * Note: ngspice's `dc` command can be used for sweeping
-
-  * Perform the sweep
+  * Sweep V(IN) from 0V to 5V in steps of 0.1V
   dc VIN 0 5 0.1
 
-  * Save the sweep data: columns are V(IN) and V(OUT)
-  * Using `save` command to output the data
-  save dc_results.dat V(IN) V(OUT)
+  * During the sweep, write V(IN) and V(OUT) data to voltages.dat
+  wrdata voltages.dat V(IN) V(OUT)
 
   quit
 .endc
