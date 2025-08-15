@@ -1,12 +1,14 @@
-* Voltage Divider Circuit
-V1 IN 0 DC 12V          ; 12V power supply
-R1 IN OUT 1k            ; Resistor R1 = 1kΩ
-R2 OUT 0 10k            ; Resistor R2 = 10kΩ
+* Voltage Divider Circuit for ngspice
+V1 IN 0 DC 12V            ; 12V DC source
+R1 IN OUT 1k              ; Resistor R1 = 1kΩ
+R2 OUT 0 10k              ; Resistor R2 = 10kΩ
 
-* Measurement command: Measure voltage at OUT
+* Measure the voltage at node OUT
 .control
   run
   print V(OUT)
+  * Optional: plot voltage
+  * plot V(IN) V(OUT)
 .endc
 
 .end
