@@ -21,10 +21,21 @@ jobs:
 
       - name: Run simulation and generate plot
         run: |
-          # Run ngspice in batch mode and save output to output.log
-          ngspice -b src/inverter.spice -o output.log
+          # Run ngspice in batch mode (assuming your circuit file is src/inverter.spice)
+          ngspice -b src/inverter.spice
 
+          # Create gnuplot script to generate plot.png
+          echo "
+          set terminal png size 800,600
+          set output 'plot.png'
+          set title 'Inverter Output Voltage'
+          set xlabel 'Time (s)'
+          set ylabel 'V(OUT)'
+          plot 'voltages.dat' using 2:1 with lines title 'V(OUT)'
+          " > plot.gp
 
+          # Run gnuplot to produce plot.png
+          gnuplot plot.gp
 
       - name: Upload output logs
         uses: actions/upload-artifact@v4.6.2
@@ -32,4 +43,8 @@ jobs:
           name: simulation-outputs
           path: output.log
 
-
+      - name: Upload plot image
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: simulation-plot
+          path: plot.png
