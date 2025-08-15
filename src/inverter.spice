@@ -5,7 +5,7 @@ VDD VDD 0 DC 5V
 VSS VSS 0 DC 0V
 
 * Input voltage source (DC sweep)
-VIN IN 0 DC 0V
+VIN IN 0 DC 5V
 
 * NMOS transistor
 M1 OUT IN VSS VSS NMOS_MODEL
