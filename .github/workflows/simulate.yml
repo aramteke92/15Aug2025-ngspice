@@ -24,19 +24,7 @@ jobs:
           # Run ngspice in batch mode and save output to output.log
           ngspice -b src/inverter.spice -o output.log
 
-          # Create gnuplot script
-          echo "
-          set terminal png size 800,600
-          set output 'voltage_plot.png'
-          set title 'Voltage Output'
-          set xlabel 'Time'
-          set ylabel 'Voltage'
-          # Adjust plot command based on actual data format
-          plot 'output.log' using 1:2 with lines title 'V(OUT)'
-          " > plot.gp
 
-          # Run gnuplot to create the plot image
-          gnuplot plot.gp
 
       - name: Upload output logs
         uses: actions/upload-artifact@v4.6.2
@@ -44,8 +32,4 @@ jobs:
           name: simulation-outputs
           path: output.log
 
-      - name: Upload voltage plot
-        uses: actions/upload-artifact@v4.6.2
-        with:
-          name: voltage-plot
-          path: voltage_plot.png
+
